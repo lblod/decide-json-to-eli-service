@@ -1,0 +1,27 @@
+{
+  "name": "decide-json-to-eli-service",
+  "version": "0.0.1",
+  "description": "Convert JSON input to ELI expressions",
+  "keywords": [
+    "json",
+    "eli"
+  ],
+  "homepage": "https://github.com/lblod/decide-json-to-eli-service#readme",
+  "bugs": {
+    "url": "https://github.com/lblod/decide-json-to-eli-service/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lblod/decide-json-to-eli-service.git"
+  },
+  "license": "MIT",
+  "author": "info@redpencil.io",
+  "type": "module",
+  "main": "app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "mu-types": "git+https://github.com/rahien/mu-types.git"
+  }
+}
