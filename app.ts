@@ -1,7 +1,7 @@
 import { app, query, errorHandler } from "mu";
 
-app.get("/", function (req, res) {
-  res.send("Hello mu-javascript-template");
+app.get("/health", async function (_req, res) {
+  res.send({ status: "ok" });
 });
 
 app.use(errorHandler);

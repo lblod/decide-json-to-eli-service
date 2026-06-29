@@ -12,4 +12,5 @@ TODO
 TODO
 
 ## API
-TODO
+### GET /health
+Returns `{ "status": "ok" }` if the service is running.
