@@ -2,7 +2,7 @@ import express from "express";
 import { app, errorHandler } from "mu";
 import config from "./config/config";
 import { convertJsonData } from "./lib/conversion";
-import { insertExpression } from "./lib/queries";
+import { batchInsertExpressions } from "./lib/queries";
 
 app.use(express.json());
 
@@ -17,12 +17,13 @@ app.post("/push-json", async function (req, res) {
     const eliObjects = convertJsonData(jsonData, resourceType);
     // TODO: This should depend on `resourceType`, avoid hardcoded expression?
     if (eliObjects?.length > 0) {
-      eliObjects.forEach((expression) => insertExpression(expression));
+      await batchInsertExpressions(eliObjects);
     }
     console.info(
       `\n>> Info: found ${eliObjects.length} instances of ${resourceType}`,
     );
   }
+
   res.status(200).send();
 });
 

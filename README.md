@@ -13,9 +13,11 @@ TODO
 TODO
 
 ### Environment variables
-| Name         | Description                                                               | Default value                          |
-|--------------|---------------------------------------------------------------------------|----------------------------------------|
-| TARGET_GRAPH | Graph in which the extracted expressions (and works) will in be inserted. | "http://mu.semte.ch/graphs/public/pdf" |
+| Name                  | Description                                                               | Default value                          |
+|-----------------------|---------------------------------------------------------------------------|----------------------------------------|
+| TARGET_GRAPH          | Graph in which the extracted expressions (and works) will in be inserted. | "http://mu.semte.ch/graphs/public/pdf" |
+| BATCH_SIZE            | The maximum number of triples inserted in a single query.                 | 100                                    |
+| SLEEP_BETWEEN_BATCHES | The time, in milliseconds, to sleep in between inserting two batches      | 1000                                   |
 
 ## API
 ### GET /health
