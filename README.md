@@ -6,7 +6,16 @@
 Service to convert local decisions from JSON format to corresponding linked data following the ELI data model.
 
 ## Getting started
-TODO
+### How to add the service to your application
+First, add the service to your application's `docker-compose.yml`. Note that the `config` volume is only necessary if you require a different configuration than the [default one](./config/config.ts). See the [configuration section](#configuration) for more information in writing a configuration file.
+
+```yaml
+  json-to-eli:
+    image: lblod/decide-json-to-eli-service:x.y.z
+    # Optional volume for custom configuration
+    volumes:
+      - ../config/json-to-eli:/config
+```
 
 ## Configuration
 ### Configuration file
