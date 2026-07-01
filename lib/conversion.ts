@@ -2,11 +2,18 @@ import { getPropertyForKey } from "../util/config";
 import { isKeyForResourceType } from "../util/config";
 import { Expression, toLanguageString } from "../types";
 import { LANGUAGES } from "../constants";
+import { isEmptyObject } from "../util/utils";
 
 export function convertJsonData(jsonData, targetType: string) {
-  return jsonData
-    .map((entry) => convertJsonObject(entry, targetType))
-    .filter((obj) => obj);
+  if (jsonData?.length > 0) {
+    // TODO: Should we also throw an error if resulting array is empty?
+    return jsonData
+      .filter((obj) => !isEmptyObject(obj))
+      .map((obj) => convertJsonObject(obj, targetType))
+      .filter((obj) => obj);
+  } else {
+    throw new Error("The received JSON data was not an array.");
+  }
 }
 
 /**
