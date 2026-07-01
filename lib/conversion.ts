@@ -27,7 +27,7 @@ function convertJsonObject(entry, targetType: string) {
       // TODO: not all properties should be language strings
       obj[prop] = toLanguageString(entry[key]);
       return obj;
-    }, {}) as Expression;
+    }, {}) as Expression; // TODO: used type should depend on targetType
 
   if (Object.keys(convertedObj).length > 0) {
     // TODO: Ideally, the language can be configured in the config.
