@@ -84,6 +84,7 @@ function expressionToTriples(expression: Expression) {
                      mu:uuid ${sparqlEscapeString(expressionUuid)} ;
                      eli:realizes ${workUri} ;
                      epvoc:expressionContent ${sparqlEscapeLanguageString(expression.content)} ;
+                     eli:language ${sparqlEscapeUri(expression.language)} ;
                      dcterms:created ${now} ;
                      dcterms:modified ${now} .
         ${optTitleTriple}`;

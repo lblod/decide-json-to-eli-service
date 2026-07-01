@@ -1,6 +1,7 @@
 import { getPropertyForKey } from "../util/config";
 import { isKeyForResourceType } from "../util/config";
 import { Expression, toLanguageString } from "../types";
+import { LANGUAGES } from "../constants";
 
 export function convertJsonData(jsonData, targetType: string) {
   return jsonData
@@ -29,6 +30,8 @@ function convertJsonObject(entry, targetType: string) {
     }, {}) as Expression;
 
   if (Object.keys(convertedObj).length > 0) {
+    // TODO: Ideally, the language can be configured in the config.
+    convertedObj.language = LANGUAGES.DE;
     return convertedObj;
   }
 }

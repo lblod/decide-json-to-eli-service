@@ -37,3 +37,7 @@ Endpoint to which JSON data can be pushed directly. The request body must contai
 
 ### GET /fetch-json
 TODO
+
+
+## Caveats
+- The language of expression (content) is currently hardcoded to be set to German.  Ideally the language can be configured via the `config` file.

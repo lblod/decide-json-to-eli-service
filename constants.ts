@@ -6,6 +6,10 @@ export const RESOURCE_BASE_URL = {
   EXPRESSION: "http://data.lblod.info/id/expressions/",
 };
 
+export enum LANGUAGES {
+  DE = "http://publications.europa.eu/resource/authority/language/DEU",
+}
+
 export const BATCH_SIZE = parseInt(process.env.BATCH_SIZE || "100");
 export const SLEEP_BETWEEN_BATCHES = parseInt(
   process.env.SLEEP_BETWEEN_BATCHES || "1000",

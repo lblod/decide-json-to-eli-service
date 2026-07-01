@@ -1,3 +1,5 @@
+import { LANGUAGES } from "./constants";
+
 export type LanguageString = {
   string: string;
   language?: string;
@@ -10,4 +12,5 @@ export function toLanguageString(string: string, language = "de") {
 export type Expression = {
   title?: LanguageString;
   content: LanguageString;
+  language?: LANGUAGES;
 };
