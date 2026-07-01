@@ -87,7 +87,7 @@ function expressionToTriples(expression: Expression) {
                      eli:language ${sparqlEscapeUri(expression.language)} ;
                      dcterms:created ${now} ;
                      dcterms:modified ${now} .
-        ${optTitleTriple}`;
+    ${optTitleTriple}`;
 
   return triples;
 }
