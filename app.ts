@@ -61,40 +61,29 @@ async function handleOpenTasks() {
   const taskUris = await findOpenTaskUris();
 
   for (const taskUri of taskUris) {
-    // - get source URL from input container (error if non found)
-    const taskData = await retrieveTaskData(taskUri);
-    if (taskData) {
-      try {
-        const jsonData = await fetchJsonData(taskData.sourceUrl);
-        const expressions = convertJsonData(jsonData);
-        console.info(
-          `\n>> INFO: found ${expressions.length} expressions for the JSON data fetched form ${taskData.sourceUrl}`,
-        );
+    try {
+      const taskData = await retrieveTaskData(taskUri);
+      const jsonData = await fetchJsonData(taskData.sourceUrl);
+      const expressions = convertJsonData(jsonData);
+      console.info(
+        `\n>> INFO: found ${expressions.length} expressions for the JSON data fetched form ${taskData.sourceUrl}`,
+      );
 
-        if (expressions.length > 0) {
-          await batchInsertExpressions(expressions);
-          await insertShapeForParentJob(taskData, expressions);
-          await updateTaskStatus(taskData, STATUS.SUCCESS);
-        } else {
-          throw new Error(
-            `The fetched JSON data did could not be converted to any expressions`,
-          );
-        }
-      } catch (e) {
-        console.log(
-          `\n>> WARN: An error occurred while while processing ${taskUri}, failing it`,
+      if (expressions.length > 0) {
+        await batchInsertExpressions(expressions);
+        await insertShapeForParentJob(taskData, expressions);
+        await updateTaskStatus(taskData, STATUS.SUCCESS);
+      } else {
+        throw new Error(
+          `The fetched JSON data did could not be converted to any expressions`,
         );
-        console.error(e);
-        await failTask(taskData, e.message);
       }
-    } else {
+    } catch (e) {
       console.log(
-        `\n>> WARN: task ${taskUri} did not contain appropriate data, failing it`,
+        `\n>> WARN: An error occurred while while processing ${taskUri}, failing it`,
       );
-      await failTask(
-        { uri: taskUri } as TaskData,
-        "Could not find the necessary data in the task. Should be task -> input container -> harvesting collection -> remote data object with URL.",
-      );
+      console.error(e);
+      await failTask({ uri: taskUri } as TaskData, e.message);
     }
   }
 

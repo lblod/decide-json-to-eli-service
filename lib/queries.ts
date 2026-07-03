@@ -177,6 +177,8 @@ export async function retrieveTaskData(taskUri: string) {
       sourceUrl: result[0].sourceUrl,
       parent: result[0].parentJob,
     } as TaskData;
+  } else {
+    throw Error("Not an appropriate task resource for json-to-eli conversion");
   }
 }
 
