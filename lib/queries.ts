@@ -12,7 +12,6 @@ import {
   RESOURCE_BASE_URL,
   SLEEP_BETWEEN_BATCHES,
   STATUS,
-  TARGET_GRAPH,
   TARGET_SHAPE_PREDICATE,
   TASK_OPERATION,
   TASK_STATUS_PREDICATE,
@@ -49,8 +48,6 @@ async function insertExpressions(expressions: Expression[]) {
     .flatMap((expression) => expressionToTriples(expression))
     .join("\n\n");
 
-  // TODO: Check what sparql-parser does with the graph clause of the query, it
-  // should not be necessary.
   const insertQuery = `
     PREFIX eli: <http://data.europa.eu/eli/ontology#>
     PREFIX epvoc: <https://data.europarl.europa.eu/def/epvoc#>
@@ -58,9 +55,7 @@ async function insertExpressions(expressions: Expression[]) {
     PREFIX dcterms: <http://purl.org/dc/terms/>
 
     INSERT DATA {
-      GRAPH ${sparqlEscapeUri(TARGET_GRAPH)} {
-        ${triplesToInsert}
-      }
+      ${triplesToInsert}
     }`;
 
   await update(insertQuery);
