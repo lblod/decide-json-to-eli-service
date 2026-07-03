@@ -60,4 +60,5 @@ Endpoint on which delta messages from the `delta-notifier` are received for proc
 
 ## Caveats
 - Each JSON object in the fetched input is converted to an ELI Expression resource.  Conversion to other types of resources is not supported.
+- The service will create a new expression for each JSON object, irrelevant of whether the object was already seen before.  It is up to the JSON data provider to avoid providing duplicate data (over time).
 - The language of expression (content) is currently hardcoded to be set to German.  Ideally the language can be configured via the `config` file.
