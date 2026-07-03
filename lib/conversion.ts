@@ -1,16 +1,16 @@
 import { getPropertyForKey } from "../util/config";
 import { isKeyForResourceType } from "../util/config";
 import { Expression, toLanguageString } from "../types";
-import { LANGUAGES } from "../constants";
+import { LANGUAGES, RESOURCE_BASE_URL } from "../constants";
 import { isEmptyObject } from "../util/utils";
+import { uuid } from "mu";
 
 export function convertJsonData(jsonData, targetType: string) {
   if (jsonData?.length > 0) {
     // TODO: Should we also throw an error if resulting array is empty?
     return jsonData
       .filter((obj) => !isEmptyObject(obj))
-      .map((obj) => convertJsonObject(obj, targetType))
-      .filter((obj) => obj);
+      .map((obj) => convertJsonObject(obj, targetType));
   } else {
     throw new Error("The received JSON data was not an array.");
   }
@@ -37,6 +37,8 @@ function convertJsonObject(entry, targetType: string) {
     }, {}) as Expression; // TODO: used type should depend on targetType
 
   if (Object.keys(convertedObj).length > 0) {
+    convertedObj.uuid = uuid();
+    convertedObj.uri = RESOURCE_BASE_URL.EXPRESSION + convertedObj.uuid;
     // TODO: Ideally, the language can be configured in the config.
     convertedObj.language = LANGUAGES.DE;
     return convertedObj;

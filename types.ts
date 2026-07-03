@@ -10,7 +10,15 @@ export function toLanguageString(string: string, language = "de") {
 }
 
 export type Expression = {
+  uri: string;
+  uuid: string;
   title?: LanguageString;
   content: LanguageString;
   language?: LANGUAGES;
+};
+
+export type TaskData = {
+  uri: string;
+  sourceUrl: string;
+  parent: string;
 };

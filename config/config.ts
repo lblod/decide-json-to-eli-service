@@ -1,5 +1,6 @@
 // Maps keys in the json file to their properties in the resource types
 export default {
+  // TODO: Remove resource type
   // resource type
   expression: {
     // key: property
