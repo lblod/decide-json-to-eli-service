@@ -115,10 +115,12 @@ function parseResult<T extends string[]>(result) {
   const bindings = result.results.bindings as unknown as Array<{
     [Key in T[number]]: {
       datatype: string;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       value: any;
     };
   }>;
   return bindings.map((row) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const obj = {} as { [Key in T[number]]: any };
     bindingKeys.forEach((key) => {
       if (
@@ -236,6 +238,7 @@ export async function updateTaskStatus(task: TaskData, newStatus: string) {
   try {
     await update(insert);
   } catch (e) {
+    // eslint-disable-next-line preserve-caught-error
     throw new Error(`${e.message}\n\nQuery that caused error:\n${insert}`);
   }
 }

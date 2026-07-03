@@ -25,7 +25,7 @@ export function convertJsonData(jsonData) {
  * @returns {Expression|undefined} An Expression object whose properties are
  *   initialised based on the mapped key-value pairs.
  */
-function convertJsonObject(entry: any): Expression | undefined {
+function convertJsonObject(entry): Expression | undefined {
   const convertedObj = Object.keys(entry)
     .filter((key) => isMappedKey(key))
     .reduce((obj, key) => {

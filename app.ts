@@ -1,7 +1,6 @@
 import { CronJob } from "cron";
 import express from "express";
 import { app, errorHandler } from "mu";
-import config from "./config/config";
 import { MISSED_DELTA_CRON, STATUS } from "./constants";
 import { convertJsonData } from "./lib/conversion";
 import {
@@ -25,7 +24,7 @@ app.post("/delta", async function (_req, res) {
   // NOTE (02/07/2026): Do not check the received delta message, simply look for
   // open tasks left to be processed.  We are not doing too much here as the
   // delta messages will be filtered by the delta notifier config already.
-  await handleOpenTasks().catch((e: any) => {
+  await handleOpenTasks().catch((e) => {
     console.error(
       `\n>> ERROR: Something went wrong while processing delta message: ${e}`,
     );
