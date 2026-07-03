@@ -41,11 +41,5 @@ Returns `{ "status": "ok" }` if the service is running.
 ### POST /delta
 Endpoint on which delta messages from the `delta-notifier` are received for processing. This service expects delta messages in [v0.0.1 ](https://github.com/mu-semtech/delta-notifier/blob/master/README.md#L87) format. When receiving a delta message, the service will query the triplestore to check for any relevant open tasks. The delta message itself is only used as a trigger, its contents are not actually used.
 
-### POST /push-json
-Endpoint to which JSON data can be pushed directly. The request body must contain JSON data that can be converted into ELI data based on the mapping in the configuration file.
-
-### GET /fetch-json
-Endpoint that allows to provide a URL to the service from where it will try to fetch JSON data.
-
 ## Caveats
 - The language of expression (content) is currently hardcoded to be set to German.  Ideally the language can be configured via the `config` file.

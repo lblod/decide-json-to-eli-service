@@ -132,42 +132,4 @@ handleOpenTasks().catch((e) => {
   process.exit(1);
 });
 
-// TODO: Remove the following (+ README)
-// Additional API calls, primarily for debugging/development.  In production
-// systems this service should only react to delta messages and process tasks.
-app.post("/push-json", async function (req, res) {
-  const jsonData = req.body;
-  await processJsonData(jsonData).catch((e) => {
-    console.log(
-      `\n>> ERROR: something went wrong when processing the JSON data`,
-    );
-    console.error(e);
-  });
-  res.status(200).send();
-});
-
-app.get("/fetch-json/:jsonEndpoint", async function (req, res) {
-  const url = req.params.jsonEndpoint;
-  const jsonData = await fetchJsonData(url).catch((e) => {
-    console.log(
-      `\n>> ERROR: something went wrong while fetching the JSON data`,
-    );
-    console.error(e);
-  });
-  await processJsonData(jsonData).catch((e) => {
-    console.log(
-      `\n>> ERROR: something went wrong when processing the JSON data`,
-    );
-    console.error(e);
-  });
-  res.status(200).send();
-});
-
-app.get("/test", async function (req, res) {
-  const sourceUrl = await retrieveTaskData(
-    "http://redpencil.data.gift/id/task/6A466265D581B7FAAC1FE42D",
-  );
-  res.send(sourceUrl);
-});
-
 app.use(errorHandler);
