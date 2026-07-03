@@ -29,7 +29,15 @@ Second, grant this service the appropriate rights in your mu-authorization confi
 
 ## Configuration
 ### Configuration file
-TODO
+The configuration maps the (relevant) keys from a JSON object to their corresponding properties in an Expression object. It itself is a simple object with as keys the JSON keys and as corresponding value a string containing the name of the Expression property. For example, the following snippet configures that a `title` key in a JSON object corresponds to the `title` property in an `Expression`, and the `data` key to the `content` property.
+
+```js
+export default {
+  title: "title",
+  data: "content",
+};
+
+```
 
 ### Environment variables
 | Name                   | Description                                                                               | Default value                                                      |
