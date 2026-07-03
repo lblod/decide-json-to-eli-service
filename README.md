@@ -12,10 +12,20 @@ First, add the service to your application's `docker-compose.yml`. Note that the
 ```yaml
   json-to-eli:
     image: lblod/decide-json-to-eli-service:x.y.z
+    environment:
+      DEFAULT_MU_AUTH_SCOPE: http://services.semantic.works/decide-json-to-eli-service
     # Optional volume for custom configuration
     volumes:
       - ../config/json-to-eli:/config
 ```
+
+Second, grant this service the appropriate rights in your mu-authorization configuration. This service uses scopes to limit its access rights, see the corresponding documentation for the [lisp](https://github.com/mu-semtech/sparql-parser#define-access-rights-for-specific-services) or [ODRL](https://github.com/mu-semtech/sparql-parser/tree/feature/odrl-configuration#define-access-rights-for-specific-services-in-odrl) configuration formats. This service needs read and write access to at least:
+
+- a graph for `eli:Expression` and `eli:Work` resources; and
+- a graph for `cogs:job`, `task:task`, `nfo:DataContainer`, `hrvst:HarvestingCollection`, `nfo:RemoteDataObject` and `sh:NodeShape`.
+
+> [!Warning]
+> Make sure the service is granted write access to exactly 1 graph for each resource type. Otherwise, it will write the same resource to multiple graphs, leading to unpredictable behaviour.
 
 ## Configuration
 ### Configuration file
