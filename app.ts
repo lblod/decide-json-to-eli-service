@@ -21,21 +21,6 @@ app.get("/health", async function (_req, res) {
   res.send({ status: "ok" });
 });
 
-async function processJsonData(jsonData) {
-  const allExpressions = [];
-  for (const resourceType in config) {
-    const expressions = convertJsonData(jsonData, resourceType);
-    allExpressions.push(...expressions);
-    // TODO: This should depend on `resourceType`, avoid hardcoded expression?
-    await batchInsertExpressions(expressions);
-
-    console.info(
-      `\n>> INFO: found ${expressions.length} instances of ${resourceType}`,
-    );
-  }
-  return allExpressions;
-}
-
 app.post("/delta", async function (_req, res) {
   // NOTE (02/07/2026): Do not check the received delta message, simply look for
   // open tasks left to be processed.  We are not doing too much here as the
@@ -81,9 +66,20 @@ async function handleOpenTasks() {
     if (taskData) {
       try {
         const jsonData = await fetchJsonData(taskData.sourceUrl);
-        const expressions = await processJsonData(jsonData);
-        await insertShapeForParentJob(taskData, expressions);
-        await updateTaskStatus(taskData, STATUS.SUCCESS);
+        const expressions = convertJsonData(jsonData);
+        console.info(
+          `\n>> INFO: found ${expressions.length} expressions for the JSON data fetched form ${taskData.sourceUrl}`,
+        );
+
+        if (expressions.length > 0) {
+          await batchInsertExpressions(expressions);
+          await insertShapeForParentJob(taskData, expressions);
+          await updateTaskStatus(taskData, STATUS.SUCCESS);
+        } else {
+          throw new Error(
+            `The fetched JSON data did could not be converted to any expressions`,
+          );
+        }
       } catch (e) {
         console.log(
           `\n>> WARN: An error occurred while while processing ${taskUri}, failing it`,

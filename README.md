@@ -42,4 +42,5 @@ Returns `{ "status": "ok" }` if the service is running.
 Endpoint on which delta messages from the `delta-notifier` are received for processing. This service expects delta messages in [v0.0.1 ](https://github.com/mu-semtech/delta-notifier/blob/master/README.md#L87) format. When receiving a delta message, the service will query the triplestore to check for any relevant open tasks. The delta message itself is only used as a trigger, its contents are not actually used.
 
 ## Caveats
+- Each JSON object in the fetched input is converted to an ELI Expression resource.  Conversion to other types of resources is not supported.
 - The language of expression (content) is currently hardcoded to be set to German.  Ideally the language can be configured via the `config` file.
