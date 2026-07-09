@@ -14,7 +14,7 @@ export type Expression = {
   uuid: string;
   title?: LanguageString;
   content: LanguageString;
-  language?: LANGUAGES;
+  language: LANGUAGES;
 };
 
 export type TaskData = {

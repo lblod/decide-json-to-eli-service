@@ -6,4 +6,6 @@ export default {
   // NOTE (30/06/2026): We explicitly ignore the `committee` key to keep
   // things similar to the PDF flow.  Similarly we ignore the keys `date`,
   // `id`, and `decision`.
+} as {
+  [key: string]: string;
 };

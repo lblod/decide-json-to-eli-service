@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["mu-types"],
-    "esModuleInterop": true,
+    "types": ["mu-types", "node"],
+    "esModuleInterop": true
   }
 }

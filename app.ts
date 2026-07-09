@@ -24,7 +24,7 @@ app.post("/delta", async function (_req, res) {
   // NOTE (02/07/2026): Do not check the received delta message, simply look for
   // open tasks left to be processed.  We are not doing too much here as the
   // delta messages will be filtered by the delta notifier config already.
-  await handleOpenTasks().catch((e) => {
+  handleOpenTasks().catch((e) => {
     console.error(
       `\n>> ERROR: Something went wrong while processing delta message: ${e}`,
     );
@@ -77,7 +77,7 @@ async function handleOpenTasks() {
           `The fetched JSON data did could not be converted to any expressions`,
         );
       }
-    } catch (e) {
+    } catch (e: any) {
       console.log(
         `\n>> WARN: An error occurred while while processing ${taskUri}, failing it`,
       );

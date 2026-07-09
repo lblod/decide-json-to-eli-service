@@ -5,12 +5,12 @@ import { LANGUAGES, RESOURCE_BASE_URL } from "../constants";
 import { isEmptyObject } from "../util/utils";
 import { uuid } from "mu";
 
-export function convertJsonData(jsonData) {
+export function convertJsonData(jsonData: any) {
   if (jsonData?.length > 0) {
     return jsonData
-      .filter((obj) => !isEmptyObject(obj))
-      .map((obj) => convertJsonObject(obj))
-      .filter((obj) => obj);
+      .filter((obj: any) => !isEmptyObject(obj))
+      .map((obj: any) => convertJsonObject(obj))
+      .filter((obj: any) => obj);
   } else {
     throw new Error("The received JSON data was not an array.");
   }
@@ -25,14 +25,18 @@ export function convertJsonData(jsonData) {
  * @returns {Expression|undefined} An Expression object whose properties are
  *   initialised based on the mapped key-value pairs.
  */
-function convertJsonObject(entry): Expression | undefined {
-  const convertedObj = Object.keys(entry)
-    .filter((key) => isMappedKey(key))
-    .reduce((obj, key) => {
+function convertJsonObject(entry: any): Expression | undefined {
+  const convertedObj = (Object.keys(entry) as { [key: string]: any })
+    .filter((key: string) => isMappedKey(key))
+    .reduce((obj: any, key: string) => {
       const prop = getPropertyForKey(key);
-      // TODO: not all properties should be language strings
-      obj[prop] = toLanguageString(entry[key]);
-      return obj;
+      if (prop) {
+        // TODO: not all properties should be language strings
+        obj[prop] = toLanguageString(entry[key]);
+        return obj;
+      } else {
+        return null;
+      }
     }, {}) as Expression;
 
   if (!isEmptyObject(convertedObj)) {

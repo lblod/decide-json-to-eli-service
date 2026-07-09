@@ -73,8 +73,6 @@ function expressionToTriples(expression: Expression) {
 
   const now = sparqlEscapeDateTime(new Date());
 
-  // TODO: Is the inverse `eli:realizes` needed?  I added it as the PDF
-  // extraction service does it to.  Not sure if any service relies on it.
   const triples = `
     ${workUri} a eli:Work ;
                mu:uuid ${sparqlEscapeString(workUuid)} ;
@@ -108,7 +106,7 @@ export async function findOpenTaskUris() {
   return result?.results.bindings?.map((b) => b.task.value) || [];
 }
 
-function parseResult<T extends string[]>(result) {
+function parseResult<T extends string[]>(result: any) {
   if (!(result.results && result.results.bindings.length)) return [];
 
   const bindingKeys = result.head.vars as T[number][];
@@ -237,7 +235,7 @@ export async function updateTaskStatus(task: TaskData, newStatus: string) {
   }`;
   try {
     await update(insert);
-  } catch (e) {
+  } catch (e: any) {
     // eslint-disable-next-line preserve-caught-error
     throw new Error(`${e.message}\n\nQuery that caused error:\n${insert}`);
   }
