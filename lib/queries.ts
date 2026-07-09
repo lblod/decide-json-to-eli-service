@@ -5,6 +5,7 @@ import {
   sparqlEscapeString,
   sparqlEscapeDateTime,
   query,
+  SparqlResponse,
 } from "mu";
 import { Expression, LanguageString, TaskData } from "../types";
 import {
@@ -106,7 +107,7 @@ export async function findOpenTaskUris() {
   return result?.results.bindings?.map((b) => b.task.value) || [];
 }
 
-function parseResult<T extends string[]>(result: any) {
+function parseResult<T extends string[]>(result: SparqlResponse) {
   if (!(result.results && result.results.bindings.length)) return [];
 
   const bindingKeys = result.head.vars as T[number][];
@@ -235,6 +236,7 @@ export async function updateTaskStatus(task: TaskData, newStatus: string) {
   }`;
   try {
     await update(insert);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     // eslint-disable-next-line preserve-caught-error
     throw new Error(`${e.message}\n\nQuery that caused error:\n${insert}`);

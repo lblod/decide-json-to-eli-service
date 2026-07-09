@@ -6,12 +6,12 @@ import { isEmptyObject } from "../util/utils";
 import { uuid } from "mu";
 import config from "../config/config";
 
-export function convertJsonData(jsonData: any) {
+export function convertJsonData(jsonData: object[]) {
   if (jsonData?.length > 0) {
     return jsonData
-      .filter((obj: any) => !isEmptyObject(obj))
-      .map((obj: any) => convertJsonObject(obj))
-      .filter((obj: any) => obj);
+      .filter((obj: object) => !isEmptyObject(obj))
+      .map((obj: object) => convertJsonObject(obj))
+      .filter((obj: Expression | undefined) => obj);
   } else {
     throw new Error("The received JSON data was not an array.");
   }
@@ -26,9 +26,11 @@ export function convertJsonData(jsonData: any) {
  * @returns {Expression|undefined} An Expression object whose properties are
  *   initialised based on the mapped key-value pairs.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function convertJsonObject(entry: any): Expression | undefined {
-  const convertedObj = (Object.keys(entry) as { [key: string]: any })
+  const convertedObj = Object.keys(entry)
     .filter((key: string) => isMappedKey(key))
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .reduce((obj: any, key: string) => {
       const prop = getPropertyForKey(key);
       if (prop) {
@@ -38,7 +40,7 @@ function convertJsonObject(entry: any): Expression | undefined {
       } else {
         return null;
       }
-    }, {}) as Expression;
+    }, {}) as unknown as Expression;
 
   if (!isEmptyObject(convertedObj)) {
     convertedObj.uuid = uuid();

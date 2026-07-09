@@ -78,7 +78,7 @@ async function handleOpenTasks() {
           `The fetched JSON data did could not be converted to any expressions`,
         );
       }
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.log(
         `\n>> WARN: An error occurred while while processing ${taskUri}, failing it`,
       );
