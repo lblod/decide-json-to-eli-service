@@ -5,10 +5,6 @@ export const RESOURCE_BASE_URL = {
   ERROR: "http://redpencil.data.gift/id/jobs/error/",
 };
 
-export enum LANGUAGES {
-  DE = "http://publications.europa.eu/resource/authority/language/DEU",
-}
-
 export const MAX_FETCH_RETRIES = parseInt(process.env.MAX_FETCH_RETRIES || "3");
 
 //

@@ -1,12 +1,15 @@
-import { LANGUAGES } from "./constants";
+import config from "./config/config";
 
 export type LanguageString = {
   string: string;
   language?: string;
 };
 
-export function toLanguageString(string: string, language = "de") {
-  return { string: string, language: language } as LanguageString;
+export function toLanguageString(string: string, language?: string) {
+  return {
+    string: string,
+    language: language || config.defaultLanguage,
+  } as LanguageString;
 }
 
 export type Expression = {
@@ -14,7 +17,7 @@ export type Expression = {
   uuid: string;
   title?: LanguageString;
   content: LanguageString;
-  language: LANGUAGES;
+  language: string;
 };
 
 export type TaskData = {

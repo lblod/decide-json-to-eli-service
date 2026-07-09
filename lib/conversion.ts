@@ -1,9 +1,10 @@
 import { getPropertyForKey } from "../util/config";
 import { isMappedKey } from "../util/config";
 import { Expression, toLanguageString } from "../types";
-import { LANGUAGES, RESOURCE_BASE_URL } from "../constants";
+import { RESOURCE_BASE_URL } from "../constants";
 import { isEmptyObject } from "../util/utils";
 import { uuid } from "mu";
+import config from "../config/config";
 
 export function convertJsonData(jsonData: any) {
   if (jsonData?.length > 0) {
@@ -42,8 +43,9 @@ function convertJsonObject(entry: any): Expression | undefined {
   if (!isEmptyObject(convertedObj)) {
     convertedObj.uuid = uuid();
     convertedObj.uri = RESOURCE_BASE_URL.EXPRESSION + convertedObj.uuid;
-    // TODO: Ideally, the language can be configured in the config.
-    convertedObj.language = LANGUAGES.DE;
+    convertedObj.language = config.languages[config.defaultLanguage];
     return convertedObj;
+  } else {
+    return undefined;
   }
 }
