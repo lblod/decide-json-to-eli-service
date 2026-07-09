@@ -108,12 +108,15 @@ CronJob.from({
   start: true,
 });
 
-handleOpenTasks().catch((e) => {
-  console.log(
-    "\n>> ERROR: Something went wrong checking for missed deltas on startup, ",
-  );
-  console.error(e);
-  process.exit(1);
-});
-
+setTimeout(
+  () =>
+    handleOpenTasks().catch((e) => {
+      console.log(
+        "\n>> ERROR: Something went wrong checking for missed deltas on startup, ",
+      );
+      console.error(e);
+      process.exit(1);
+    }),
+  3000,
+);
 app.use(errorHandler);
