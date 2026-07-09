@@ -62,6 +62,7 @@ async function handleOpenTasks() {
   for (const taskUri of taskUris) {
     try {
       const taskData = await retrieveTaskData(taskUri);
+      await updateTaskStatus(taskData, STATUS.BUSY);
       const jsonData = await fetchJsonData(taskData.sourceUrl);
       const expressions = convertJsonData(jsonData);
       console.info(
