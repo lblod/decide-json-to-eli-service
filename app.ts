@@ -57,6 +57,18 @@ async function handleOpenTasks() {
   const myRunning = new Date();
   running = myRunning;
 
+  const taskUris = await safeHandleOpenTasks();
+
+  if (running != myRunning) {
+    running = null;
+    return handleOpenTasks();
+  } else {
+    running = null;
+    return taskUris;
+  }
+}
+
+async function safeHandleOpenTasks() {
   const taskUris = await findOpenTaskUris();
 
   for (const taskUri of taskUris) {
@@ -86,14 +98,7 @@ async function handleOpenTasks() {
       await failTask({ uri: taskUri } as TaskData, e.message);
     }
   }
-
-  if (running != myRunning) {
-    running = null;
-    return handleOpenTasks();
-  } else {
-    running = null;
-    return taskUris;
-  }
+  return taskUris;
 }
 
 CronJob.from({
