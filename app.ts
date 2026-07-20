@@ -57,7 +57,11 @@ async function handleOpenTasks() {
   const myRunning = new Date();
   running = myRunning;
 
-  const taskUris = await safeHandleOpenTasks();
+  const taskUris = await safeHandleOpenTasks().catch((e) => {
+    console.log(
+      `An uncaught exception happened while handling open tasks: ${e}`,
+    );
+  });
 
   if (running != myRunning) {
     running = null;
