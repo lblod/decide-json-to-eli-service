@@ -29,15 +29,37 @@ Second, grant this service the appropriate rights in your mu-authorization confi
 
 ## Configuration
 ### Configuration file
-The configuration maps the (relevant) keys from a JSON object to their corresponding properties in an Expression object. It itself is a simple object with as keys the JSON keys and as corresponding value a string containing the name of the Expression property. For example, the following snippet configures that a `title` key in a JSON object corresponds to the `title` property in an `Expression`, and the `data` key to the `content` property.
+The configuration file describes how JSON keys should be mapped to properties in an `Expression` object, along with some additional configuration necessary creating appropriate resources. The configuration must contain a `keyMapping` property. This property contains as keys the JSON keys with the name of mapped `Expression` property as value. For example, the following snippet configures that a `title` key in a JSON object corresponds to the `title` property in an `Expression`, and the `data` key to the `content` property:
 
 ```js
 export default {
-  title: "title",
-  data: "content",
+  keyMapping: {
+    title: "title",
+    data: "content",
+  }
 };
-
 ```
+
+> [!Warning]
+> This part of the configuration file is likely to change in a future version of the service. Be aware when bumping the service.
+
+Furthermore, a `languages` property must specify at least on language in which expressions are expressed. This is an object with as keys shorthand identifiers for a language and as values the corresponding URI as it is understood by other services in the pipeline. In addition, a `defaultLanguage` property must specify the default language to use. For example, the above snippet can be extended with two language, Dutch and German, where we will default to German:
+
+```js
+export default {
+  keyMapping: {
+    title: "title",
+    data: "content",
+  },
+  languages: {
+    de: "http://publications.europa.eu/resource/authority/language/DEU",
+    nl: "http://publications.europa.eu/resource/authority/language/NLD",
+  } as { [key: string]: string },
+  defaultLanguage: "de",
+};
+```
+
+For a more extensive configuration example, see the [default configuration](./config/config.ts) included in this repository.
 
 ### Environment variables
 | Name                   | Description                                                                               | Default value                                                      |
