@@ -1,15 +1,15 @@
 import {
-  update,
   uuid,
   sparqlEscapeUri,
   sparqlEscapeString,
   sparqlEscapeDateTime,
-  query,
   SparqlResponse,
 } from "mu";
+import { querySudo as query, updateSudo as update } from "@lblod/mu-auth-sudo";
 import { Expression, LanguageString, TaskData } from "../types";
 import {
   EXPRESSIONS_PER_BATCH,
+  JOB_GRAPH,
   RESOURCE_BASE_URL,
   SLEEP_BETWEEN_BATCHES,
   STATUS,
@@ -56,7 +56,9 @@ async function insertExpressions(expressions: Expression[]) {
     PREFIX dcterms: <http://purl.org/dc/terms/>
 
     INSERT DATA {
-      ${triplesToInsert}
+      GRAPH ${sparqlEscapeUri(JOB_GRAPH)} {
+        ${triplesToInsert}
+      }
     }`;
 
   await update(insertQuery);
@@ -95,14 +97,16 @@ export async function findOpenTaskUris() {
     PREFIX task: <http://redpencil.data.gift/vocabularies/tasks/>
     SELECT DISTINCT ?task
     WHERE {
-      VALUES ?operation {
-        ${sparqlEscapeUri(TASK_OPERATION)}
+      GRAPH ${sparqlEscapeUri(JOB_GRAPH)} {
+        VALUES ?operation {
+          ${sparqlEscapeUri(TASK_OPERATION)}
+        }
+        ?task a task:Task ;
+              ${sparqlEscapeUri(TASK_STATUS_PREDICATE)} ${sparqlEscapeUri(STATUS.SCHEDULED)} ;
+              task:operation ?operation .
       }
-      ?task a task:Task ;
-            ${sparqlEscapeUri(TASK_STATUS_PREDICATE)} ${sparqlEscapeUri(STATUS.SCHEDULED)} ;
-            task:operation ?operation .
     }
-  `);
+`);
 
   return result?.results.bindings?.map((b) => b.task.value) || [];
 }
@@ -153,15 +157,17 @@ export async function retrieveTaskData(taskUri: string) {
 
     SELECT DISTINCT ?parentJob ?sourceUrl
     WHERE {
-      VALUES ?taskUri {
-        ${sparqlEscapeUri(taskUri)}
-      }
-      ?taskUri task:inputContainer ?inputContainer ;
-               dcterms:isPartOf ?parentJob .
+      GRAPH ${sparqlEscapeUri(JOB_GRAPH)} {
+        VALUES ?taskUri {
+          ${sparqlEscapeUri(taskUri)}
+        }
+        ?taskUri task:inputContainer ?inputContainer ;
+                 dcterms:isPartOf ?parentJob .
 
-      ?inputContainer task:hasHarvestingCollection ?collection .
-      ?collection dcterms:hasPart ?remoteDataObject .
-      ?remoteDataObject nie:url ?sourceUrl .
+        ?inputContainer task:hasHarvestingCollection ?collection .
+        ?collection dcterms:hasPart ?remoteDataObject .
+        ?remoteDataObject nie:url ?sourceUrl .
+      }
     }`);
 
   const result = parseResult(taskSourceUrl);
@@ -195,11 +201,13 @@ export async function insertShapeForParentJob(
     PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 
     INSERT {
-      ?shape a sh:NodeShape ;
-             mu:uuid ${sparqlEscapeString(shapeUuid)} ;
-             sh:targetNode ?node .
-      ?job a ext:AnnotationJob ;
-           ${sparqlEscapeUri(TARGET_SHAPE_PREDICATE)} ?shape .
+      GRAPH ${sparqlEscapeUri(JOB_GRAPH)} {
+        ?shape a sh:NodeShape ;
+               mu:uuid ${sparqlEscapeString(shapeUuid)} ;
+               sh:targetNode ?node .
+        ?job a ext:AnnotationJob ;
+             ${sparqlEscapeUri(TARGET_SHAPE_PREDICATE)} ?shape .
+      }
     } WHERE {
       VALUES ?job {
         ${sparqlEscapeUri(task.parent)}
@@ -220,20 +228,26 @@ export async function updateTaskStatus(task: TaskData, newStatus: string) {
     PREFIX adms: <http://www.w3.org/ns/adms#>
     PREFIX dcterms: <http://purl.org/dc/terms/>
     DELETE {
-      ?task adms:status ?status ;
-            dcterms:modified ?modified .
+      GRAPH ${sparqlEscapeUri(JOB_GRAPH)} {
+        ?task adms:status ?status ;
+              dcterms:modified ?modified .
+      }
     }
     INSERT {
-      ?task adms:status ${sparqlEscapeUri(newStatus)} ;
-            dcterms:modified ${now} .
+      GRAPH ${sparqlEscapeUri(JOB_GRAPH)} {
+        ?task adms:status ${sparqlEscapeUri(newStatus)} ;
+              dcterms:modified ${now} .
+      }
     }
     WHERE {
       VALUES ?task {
         ${sparqlEscapeUri(task.uri)}
       }
-      ?task adms:status ?status .
-      OPTIONAL { ?task dcterms:modified ?modified . }
-  }`;
+      GRAPH ${sparqlEscapeUri(JOB_GRAPH)} {
+        ?task adms:status ?status .
+        OPTIONAL { ?task dcterms:modified ?modified . }
+      }
+    }`;
   try {
     await update(insert);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -253,10 +267,12 @@ export async function appendError(task: TaskData, errorMessage: string) {
     PREFIX task: <http://redpencil.data.gift/vocabularies/tasks/>
 
     INSERT {
-      ?error a oslc:Error ;
-             mu:uuid ${sparqlEscapeString(errorUuid)} ;
-             oslc:message ${sparqlEscapeString(errorMessage)} .
-      ${sparqlEscapeUri(task.uri)} task:error ?error .
+      GRAPH ${sparqlEscapeUri(JOB_GRAPH)} {
+        ?error a oslc:Error ;
+               mu:uuid ${sparqlEscapeString(errorUuid)} ;
+               oslc:message ${sparqlEscapeString(errorMessage)} .
+        ${sparqlEscapeUri(task.uri)} task:error ?error .
+      }
     } WHERE {
       VALUES ?error {
         ${sparqlEscapeUri(errorUri)}

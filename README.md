@@ -64,6 +64,7 @@ For a more extensive configuration example, see the [default configuration](./co
 ### Environment variables
 | Name                   | Description                                                                               | Default value                                                      |
 |------------------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| JOB_GRAPH              | The graph in which jobs and tasks are located.                                            | "http://mu.semte.ch/graphs/harvesting"                             |
 | TASK_OPERATION         | The URI of the operation for relevant tasks.                                              | "http://lblod.data.gift/id/jobs/concept/TaskOperation/json-to-eli" |
 | TARGET_SHAPE_PREDICATE | The predicate used to link a job resource to its target shape.                            | "http://mu.semte.ch/vocabularies/ext/shapeForTargets"              |
 |                        |                                                                                           |                                                                    |
