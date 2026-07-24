@@ -16,6 +16,8 @@ export const TASK_OPERATION =
 
 export const JOB_GRAPH =
   process.env.JOB_GRAPH || "http://mu.semte.ch/graphs/harvesting";
+export const TARGET_GRAPH =
+  process.env.TARGET_GRAPH || "http://mu.semte.ch/graphs/public/pdf";
 
 export const TASK_STATUS_PREDICATE = "http://www.w3.org/ns/adms#status";
 
