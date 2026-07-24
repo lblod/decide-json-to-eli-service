@@ -13,6 +13,7 @@ import {
   RESOURCE_BASE_URL,
   SLEEP_BETWEEN_BATCHES,
   STATUS,
+  TARGET_GRAPH,
   TARGET_SHAPE_PREDICATE,
   TASK_OPERATION,
   TASK_STATUS_PREDICATE,
@@ -56,7 +57,7 @@ async function insertExpressions(expressions: Expression[]) {
     PREFIX dcterms: <http://purl.org/dc/terms/>
 
     INSERT DATA {
-      GRAPH ${sparqlEscapeUri(JOB_GRAPH)} {
+      GRAPH ${sparqlEscapeUri(TARGET_GRAPH)} {
         ${triplesToInsert}
       }
     }`;
